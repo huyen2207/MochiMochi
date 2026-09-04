@@ -196,9 +196,11 @@ p{
   gap: 0.65rem;
 }
 
-.logo img{
-  height: 42px;
-  width: auto;
+.logo-mark{
+  width: 40px;
+  height: 40px;
+  color: var(--color-matcha-dark);
+  flex-shrink: 0;
 }
 
 .logo-text{
@@ -650,6 +652,14 @@ section{
 .footer-inner{
   padding: var(--space-lg) var(--space-md);
   text-align: center;
+}
+
+.footer-mark{
+  width: 52px;
+  height: 52px;
+  color: var(--color-off-white);
+  margin: 0 auto 1rem;
+  display: block;
 }
 
 .footer-brand{
