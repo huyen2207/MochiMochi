@@ -22,6 +22,9 @@
 
   --radius: 2px;
   --transition: 0.35s ease;
+
+  /* Sticky headerの実測高さ。script.jsがヘッダーのサイズ変化に合わせて上書きする。 */
+  --header-h: 70px;
 }
 
 *, *::before, *::after{
@@ -30,6 +33,7 @@
 
 html{
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
 }
 
 body{
@@ -233,9 +237,10 @@ p{
   display: none;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-end;
   gap: 5px;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border: none;
   background: none;
   cursor: pointer;
@@ -244,6 +249,7 @@ p{
 
 .menu-toggle span{
   display: block;
+  width: 26px;
   height: 1.5px;
   background: var(--color-matcha-dark);
   transition: transform var(--transition), opacity var(--transition);
@@ -739,7 +745,7 @@ section{
 @media (max-width: 720px){
   .main-nav{
     position: fixed;
-    top: 65px;
+    top: var(--header-h);
     left: 0;
     right: 0;
     background: var(--color-off-white);
@@ -772,6 +778,10 @@ section{
 
   .menu-toggle{
     display: flex;
+  }
+
+  body.nav-open{
+    overflow: hidden;
   }
 }
 

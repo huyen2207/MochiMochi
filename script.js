@@ -7,6 +7,20 @@ const header = document.getElementById("site-header");
 const menuToggle = document.getElementById("menu-toggle");
 const mainNav = document.getElementById("main-nav");
 
+/* モバイルナビの表示位置とアンカーのオフセットを、実測のヘッダー高さに合わせる。 */
+function setHeaderHeight(){
+  const height = header.getBoundingClientRect().height;
+  document.documentElement.style.setProperty("--header-h", `${height}px`);
+}
+
+setHeaderHeight();
+
+if ("ResizeObserver" in window){
+  new ResizeObserver(setHeaderHeight).observe(header);
+} else {
+  window.addEventListener("resize", setHeaderHeight);
+}
+
 function setHeaderShadow(){
   if (window.scrollY > 8){
     header.style.boxShadow = "0 1px 0 rgba(28,28,26,0.06)";
@@ -18,19 +32,20 @@ function setHeaderShadow(){
 setHeaderShadow();
 window.addEventListener("scroll", setHeaderShadow, { passive: true });
 
-function closeMobileNav(){
-  mainNav.classList.remove("is-open");
-  menuToggle.classList.remove("is-active");
-  menuToggle.setAttribute("aria-expanded", "false");
-}
-
-function toggleMobileNav(){
-  const isOpen = mainNav.classList.toggle("is-open");
+function setMobileNav(isOpen){
+  mainNav.classList.toggle("is-open", isOpen);
   menuToggle.classList.toggle("is-active", isOpen);
   menuToggle.setAttribute("aria-expanded", String(isOpen));
+  document.body.classList.toggle("nav-open", isOpen);
 }
 
-menuToggle.addEventListener("click", toggleMobileNav);
+function closeMobileNav(){
+  setMobileNav(false);
+}
+
+menuToggle.addEventListener("click", () => {
+  setMobileNav(!mainNav.classList.contains("is-open"));
+});
 
 mainNav.querySelectorAll("a").forEach(link => {
   link.addEventListener("click", closeMobileNav);
@@ -38,6 +53,12 @@ mainNav.querySelectorAll("a").forEach(link => {
 
 document.addEventListener("keydown", event => {
   if (event.key === "Escape") closeMobileNav();
+});
+
+document.addEventListener("click", event => {
+  if (!mainNav.classList.contains("is-open")) return;
+  if (mainNav.contains(event.target) || menuToggle.contains(event.target)) return;
+  closeMobileNav();
 });
 
 const revealTargets = document.querySelectorAll("[data-reveal]");
